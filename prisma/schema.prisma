@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Enterprise {
+  cod_empreendimento   String @id @unique
+  cod_anterior         String?
+  data_cadastro        DateTime @default(now())
+  nome_proprietario    String?
+  cpf_cnpj_proprietario String?
+  emp_nm_empreendimento String?
+  endereco_empreendimento String?
+  ponto_referencia     String?
+  observacao String?
+
+  intereferences Interference[]
+  users User[]
+
+  @@map("Empreendimento")
+}
+
+model User {
+  emp_nu_cpfcnpj               String @id @unique
+  cod_empreendimento           String
+  emp_nm_usuario               String?
+  emp_apel_usuario             String?
+  relacao_usuario_proprietario String?
+  tipo_acordo_com_proprietario String?
+  emp_ds_logradouro            String?
+  emp_ds_bairro                String?
+  emp_nu_logradouro            String?
+  emp_nm_municipio             String?
+  emp_sg_uf                    String?
+  emp_ds_emailresponsavel      String?
+  emp_nu_ddd                   String?
+  emp_nu_telefone              String?
+  emp_ds_complementoendereco   String?
+  emp_nu_caixapostal           String?
+  emp_nu_cependereco           String?
+  regularizado                 String?
+  outras_informacoes           String?
+
+  empreendimento               Enterprise @relation(fields: [cod_empreendimento], references: [cod_empreendimento])
+
+  @@map("Usuario")
+}
+
+model Interference {
+  cod_interferencia           String     @id @unique
+  cod_empreendimento          String
+  int_nm_interferencia        String?
+  int_nm_corpohidrico         String?
+  int_tch_ds                  String?
+  int_tdm_ds                  String?
+  int_tin_ds                  String?
+  int_tsi_ds                  String?
+  int_tsu_ds                  String?
+  ing_nm_municipio            String?
+  ing_sg_ufmunicipio          String?
+  int_nm_margem               String?
+  fin_tfn_ds                  String?
+  fin_secundaria              String?
+  fin_terciaria               String?
+  cte_tca_ds_1                String?
+  cte_tca_ds_2                String?
+  cte_nu_cabecas_1            String?
+  cte_nu_cabecas_2            String?
+  cte_tsc_ds_1                String?
+  cte_tsc_ds_2                String?
+  ttc_tcu_ds                  String?
+  fes_nu_areatotaltanque      String?
+  fes_nu_profundidademediatanque String?
+  numero_tanques              String?
+  nu_pessoas                  String?
+  int_nu_bombas               String?
+  emp_nu_barreiros            String?
+  fonte_energia               String?
+  unidade_consumidora         String?
+  nome_inscrito               String?
+  observacao_finalidade       String?
+  int_cd_regla                String?
+  int_nu_cnarh                String?
+  observacao  String
+
+  empreendimento              Enterprise @relation(fields: [cod_empreendimento], references: [cod_empreendimento])
+
+    @@map("Interferencia")
+}
